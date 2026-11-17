@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Library Management System</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <h2>📚 MyLibrary</h2>
+
+        <nav>
+            <a href="#dashboard">🏠 Dashboard</a>
+            <a href="#books">📖 Books</a>
+            <a href="#members">👨‍🎓 Members</a>
+            <a href="#issue">📤 Issue Book</a>
+            <a href="#return">📥 Return Book</a>
+        </nav>
+
+    </aside>
+
+
+    <!-- Main Content -->
+
+    <main class="main">
+
+        <!-- Header -->
+
+        <header>
+
+            <div>
+                <h1>Library Management</h1>
+                <p>Manage your library easily</p>
+            </div>
+
+            <button class="profile">👤 Admin</button>
+
+        </header>
+
+
+        <!-- Dashboard -->
+
+        <section id="dashboard">
+
+            <h2>Dashboard</h2>
+
+            <div class="cards">
+
+                <div class="card">
+                    <div class="icon">📚</div>
+                    <h3 id="totalBooks">0</h3>
+                    <p>Total Books</p>
+                </div>
+
+                <div class="card">
+                    <div class="icon">✅</div>
+                    <h3 id="availableBooks">0</h3>
+                    <p>Available Books</p>
+                </div>
+
+                <div class="card">
+                    <div class="icon">📤</div>
+                    <h3 id="issuedBooks">0</h3>
+                    <p>Issued Books</p>
+                </div>
+
+                <div class="card">
+                    <div class="icon">👨‍🎓</div>
+                    <h3 id="totalMembers">0</h3>
+                    <p>Members</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Books Section -->
+
+        <section id="books" class="box">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>Books</h2>
+                    <p>Manage library books</p>
+                </div>
+
+                <button onclick="openAddBook()">
+                    + Add Book
+                </button>
+
+            </div>
+            <h2>Add New Book</h2>
+
+<form action="/add_book" method="POST">
+    <input type="text" name="title" placeholder="Book Title" required>
+    <input type="text" name="author" placeholder="Author Name" required>
+    <button type="submit">Add Book</button>
+</form>
+
+
+            <!-- Search -->
+
+            <input
+                type="text"
+                id="search"
+                class="search"
+                placeholder="🔍 Search book by title, author or ID..."
+            >
+
+
+            <!-- Books Table -->
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Book ID</th>
+                            <th>Book Title</th>
+                            <th>Author</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="bookList"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- Members -->
+
+        <section id="members" class="box">
+
+            <h2>Members</h2>
+
+            <p class="description">
+                Library members can issue and return books.
+            </p>
+
+            <div class="member-form">
+
+                <input
+                    type="text"
+                    id="memberName"
+                    placeholder="Student name"
+                >
+
+                <input
+                    type="text"
+                    id="memberId"
+                    placeholder="Student ID"
+                >
+
+                <button onclick="addMember()">
+                    Add Member
+                </button>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Name</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="memberList"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- Issue Book -->
+
+        <section id="issue" class="box">
+
+            <h2>📤 Issue Book</h2>
+
+            <p class="description">
+                Issue an available book to a member.
+            </p>
+
+            <div class="form">
+
+                <input
+                    type="text"
+                    id="issueMember"
+                    placeholder="Student ID"
+                >
+
+                <input
+                    type="text"
+                    id="issueBook"
+                    placeholder="Book ID"
+                >
+
+                <button onclick="issueBook()">
+                    Issue Book
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- Return Book -->
+
+        <section id="return" class="box">
+
+            <h2>📥 Return Book</h2>
+
+            <p class="description">
+                Return an issued book.
+            </p>
+
+            <div class="form">
+
+                <input
+                    type="text"
+                    id="returnBookId"
+                    placeholder="Book ID"
+                >
+
+                <button onclick="returnBook()">
+                    Return Book
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- Footer -->
+
+        <footer>
+
+            <p>
+                © 2026 MyLibrary | By Siddheshwari Rajput
+            </p>
+
+        </footer>
+
+    </main>
+
+
+    <!-- Add Book Popup -->
+
+    <div id="bookModal" class="modal">
+
+        <div class="modal-content">
+
+            <span class="close" onclick="closeAddBook()">
+                &times;
+            </span>
+
+            <h2>Add New Book</h2>
+
+            <input
+                type="text"
+                id="newBookId"
+                placeholder="Book ID"
+            >
+
+            <input
+                type="text"
+                id="newBookTitle"
+                placeholder="Book Title"
+            >
+
+            <input
+                type="text"
+                id="newBookAuthor"
+                placeholder="Author"
+            >
+
+            <button onclick="addBook()">
+                Add Book
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
